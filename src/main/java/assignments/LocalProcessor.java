@@ -8,32 +8,36 @@ import lombok.Setter;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Scanner;
 
 @Getter
 @Setter
 public class LocalProcessor {
-    private static LinkedList<String> stringArrayList = new LinkedList<>();
-    private String processorVersion;
-    private Scanner informationScanner;
+    static ArrayList<String> stringArrayList = new ArrayList<>();
+    protected String ProcessorVersion;
+    Scanner informationScanner;
     private String processorName;
     private Long period = 1_000_000_000_000_0L;
     private Integer valueOfCheap;
 
-    public LocalProcessor(String processorName, Long period, String processorVersion, Integer valueOfCheap,
-                          Scanner informationscanner, LinkedList<String> stringArrayList) {
+    public LocalProcessor(String processorName, Long period, String ProcessorVersion, Integer valueOfCheap,
+                          Scanner informationscanner, ArrayList<String> stringArrayList) {
         this.processorName = processorName;
         this.period = period;
-        this.processorVersion = processorVersion;
+        this.ProcessorVersion = ProcessorVersion;
         this.valueOfCheap = valueOfCheap;
         this.informationScanner = informationscanner;
         this.stringArrayList = stringArrayList;
     }
 
+    public LocalProcessor() {
+    }
+
     @ListIteratorAnnotation
-    public void listIterator(LinkedList<String> stringList) {
-        stringArrayList = new LinkedList<>(stringList);
+    public void listIterator(ArrayList<String> stringList) {
+        stringArrayList = new ArrayList<>(stringList);
         for (int i = 0; i < period && i < stringArrayList.size(); i++) {
             System.out.println(stringArrayList.get(i).hashCode());
         }
@@ -50,10 +54,9 @@ public class LocalProcessor {
 
     @ReadFullProcessorNameAnnotation
     public void readFullProcessorName(File file) throws FileNotFoundException {
-        try (Scanner informationScanner = new Scanner(file)) {
-            while (informationScanner.hasNext()) {
-                processorVersion += informationScanner.nextLine();
-            }
+        informationScanner = new Scanner(file);
+        while (informationScanner.hasNext()) {
+            ProcessorVersion += informationScanner.nextLine();
         }
 
     }
