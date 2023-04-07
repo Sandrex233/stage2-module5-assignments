@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.lang.StringBuilder;
 import java.util.Scanner;
 
 @Getter
@@ -36,7 +37,7 @@ public class LocalProcessor {
     }
 
     @ListIteratorAnnotation
-    public void listIterator(ArrayList<String> stringList) {
+    public void listIterator(LinkedList<String> stringList) {
         stringArrayList = new ArrayList<>(stringList);
         for (int i = 0; i < period && i < stringArrayList.size(); i++) {
             String str = stringArrayList.get(i);
@@ -56,13 +57,18 @@ public class LocalProcessor {
     }
 
     @ReadFullProcessorNameAnnotation
-    public void readFullProcessorName(File file) throws FileNotFoundException {
+    public void readFullProcessorName(File file) {
         if (!file.exists()) {
             throw new IllegalStateException("File not found: " + file.getPath());
         }
-        informationScanner = new Scanner(file);
-        while (informationScanner.hasNext()) {
-            processorVersion += informationScanner.nextLine();
+        try {
+            informationScanner = new Scanner(file);
+            while (informationScanner.hasNext()) {
+                processorVersion += informationScanner.nextLine();
+            }
+        } catch (FileNotFoundException e) {
+            throw new IllegalStateException("File not found: " + file.getPath());
         }
     }
+
 }
