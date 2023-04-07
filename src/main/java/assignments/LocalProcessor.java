@@ -16,7 +16,7 @@ import java.util.Scanner;
 @Setter
 public class LocalProcessor {
     static ArrayList<String> stringArrayList = new ArrayList<>();
-    protected String ProcessorVersion;
+    protected String processorVersion;
     Scanner informationScanner;
     private String processorName;
     private Long period = 1_000_000_000_000_0L;
@@ -26,7 +26,7 @@ public class LocalProcessor {
                           Scanner informationscanner, ArrayList<String> stringArrayList) {
         this.processorName = processorName;
         this.period = period;
-        this.ProcessorVersion = ProcessorVersion;
+        this.processorVersion = ProcessorVersion;
         this.valueOfCheap = valueOfCheap;
         this.informationScanner = informationscanner;
         this.stringArrayList = stringArrayList;
@@ -39,7 +39,10 @@ public class LocalProcessor {
     public void listIterator(ArrayList<String> stringList) {
         stringArrayList = new ArrayList<>(stringList);
         for (int i = 0; i < period && i < stringArrayList.size(); i++) {
-            System.out.println(stringArrayList.get(i).hashCode());
+            String str = stringArrayList.get(i);
+            if (str != null) {
+                System.out.println(str.hashCode());
+            }
         }
     }
 
@@ -54,10 +57,12 @@ public class LocalProcessor {
 
     @ReadFullProcessorNameAnnotation
     public void readFullProcessorName(File file) throws FileNotFoundException {
+        if (!file.exists()) {
+            throw new IllegalStateException("File not found: " + file.getPath());
+        }
         informationScanner = new Scanner(file);
         while (informationScanner.hasNext()) {
-            ProcessorVersion += informationScanner.nextLine();
+            processorVersion += informationScanner.nextLine();
         }
-
     }
 }
